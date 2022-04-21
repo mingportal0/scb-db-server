@@ -1,0 +1,22 @@
+version: '1'
+services:
+  mongodb:
+    build: .
+    ports:
+      - "${MONGO_PORT}:27017"
+    volumes:
+      - "./data/db:/data/db"
+      - ./users_init.sh:/users_init.sh
+    networks:
+      - mongo
+    env_file: 
+      - .env
+    entrypoint: ["/bin/bash","-c"]
+    command:
+      - |
+        /users_init.sh
+        /bin/bash
+    restart: always
+networks:
+   mongo:
+    driver: "bridge"
